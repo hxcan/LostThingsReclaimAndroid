@@ -1,4 +1,4 @@
-package com.lostthings.reclaim.ui;
+package com.stupidbeauty.lostthingsreclaim.ui;
 
 import android.os.Bundle;
 
