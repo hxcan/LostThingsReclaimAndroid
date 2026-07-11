@@ -1,4 +1,4 @@
-package com.lostthings.reclaim.viewmodel;
+package com.stupidbeauty.lostthingsreclaim.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
