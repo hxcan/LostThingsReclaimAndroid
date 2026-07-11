@@ -17,10 +17,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // ✅ 正式版签名配置（任务 #837548745464）
+    // 参考 sisterfuture 项目的简化风格：keystore 文件名 hardcode，不引入文件名相关 Secret
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
+    signingConfigs {
+        release {
+            // 文件名 hardcode 为 'stupidbeauty.keystore'，与 sisterfuture 风格一致
+            storeFile file(keystoreProperties['storeFile'] ?: 'stupidbeauty.keystore')
+            storePassword keystoreProperties['storePassword'] ?: System.getenv('RELEASE_STORE_PASSWORD')
+            keyAlias keystoreProperties['keyAlias'] ?: System.getenv('RELEASE_KEY_ALIAS')
+            keyPassword keystoreProperties['keyPassword'] ?: System.getenv('RELEASE_KEY_PASSWORD')
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // ✅ 启用正式版签名
+            signingConfig signingConfigs.release
         }
     }
 
