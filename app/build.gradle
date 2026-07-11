@@ -18,20 +18,13 @@ android {
     }
 
     // ✅ 正式版签名配置（任务 #837548745464）
-    // 密码通过环境变量或 local.properties 注入，不应硬编码
-    def keystorePropertiesFile = rootProject.file("keystore.properties")
-    def keystoreProperties = new Properties()
-    if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    }
-
+    // 参考 sisterfuture 项目的写法：keystore 文件名固定为 stupidbeauty.keystore
     signingConfigs {
         release {
-            // 优先从环境变量读取（CI/CD），其次从 keystore.properties（本地开发）
-            storeFile file(keystoreProperties['storeFile'] ?: System.getenv('RELEASE_STORE_FILE') ?: 'stupidbeauty.keystore')
-            storePassword keystoreProperties['storePassword'] ?: System.getenv('RELEASE_STORE_PASSWORD')
-            keyAlias keystoreProperties['keyAlias'] ?: System.getenv('RELEASE_KEY_ALIAS')
-            keyPassword keystoreProperties['keyPassword'] ?: System.getenv('RELEASE_KEY_PASSWORD')
+            storeFile file('stupidbeauty.keystore')
+            storePassword System.getenv('RELEASE_STORE_PASSWORD') ?: ''
+            keyAlias System.getenv('RELEASE_KEY_ALIAS') ?: ''
+            keyPassword System.getenv('RELEASE_KEY_PASSWORD') ?: ''
         }
     }
 
@@ -39,7 +32,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // ✅ 启用正式版签名
             signingConfig signingConfigs.release
         }
     }
