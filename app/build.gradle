@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.lostthings.reclaim'
+    namespace 'com.stupidbeauty.lostthingsreclaim'
     compileSdk 34
 
     defaultConfig {
@@ -83,6 +83,9 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation 'androidx.room:room-ktx:2.6.1'
     annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    // 🆕 Android Crash Detector - 姐姐自家库，全局异常处理 + 崩溃日志到外置存储
+    implementation 'com.github.hxcan:android-crash-detector:2026.4.8'
 
     // 测试
     testImplementation 'junit:junit:4.13.2'
