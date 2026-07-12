@@ -2,39 +2,27 @@ package com.stupidbeauty.lostthingsreclaim;
 
 import android.app.Application;
 import android.util.Log;
-import org.acra.ACRA;
-import org.acra.config.mailSender;
-import org.acra.config.toastSender;
-import org.acra.data.StringFormat;
+import com.stupidbeauty.crashdetector.CrashHandler;
 
 /**
- * Application 类，初始化 ACRA 崩溃监控。
- * 
- * 崩溃时会把日志发送到指定邮箱，方便定位问题。
+ * Application 类，初始化崩溃监控。
+ *
+ * 借鉴 sisterfuture 项目（SisterFutureApplication.java）的风格：
+ * - 简洁、不引入过多第三方依赖
+ * - 使用自家 android-crash-detector 库
+ * - 崩溃日志自动写入外置存储，方便后续排查
  */
-@org.acra.annotation.AcraCore(
-    reportFormat = StringFormat.JSON,
-    logcatArguments = {"-t", "200", "*:V"}
-)
-@org.acra.annotation.AcraMailSender(
-    mailTo = "stupidbeauty@qq.com",
-    subject = "LostThingsReclaim Android 崩溃报告",
-    reportAsBody = true
-)
-@org.acra.annotation.AcraToast(
-    resText = "抱歉，应用遇到了崩溃，已记录日志"
-)
-public class LostThingsApp extends Application {
-
+public class LostThingsApp extends Application
+{
     private static final String TAG = "LostThingsApp";
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
-        Log.i(TAG, "Application onCreate: 初始化 ACRA 崩溃监控");
-        
-        // 初始化 ACRA
-        ACRA.init(this);
-        Log.i(TAG, "ACRA 初始化完成");
+
+        // 初始化全局崩溃检测器 - 与 sisterfuture 项目保持一致
+        CrashHandler.init(this);
+        Log.i(TAG, "✅ android-crash-detector 库已初始化");
     }
 }
